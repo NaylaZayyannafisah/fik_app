@@ -3,7 +3,7 @@ import 'package:admin_fik_app/customstyle/custom_scaffold.dart';
 import 'package:admin_fik_app/customstyle/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
+import 'package:admin_fik_app/data/api_data.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -15,6 +15,34 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _formSignInKey = GlobalKey<FormState>();
   bool rememberPassword = true;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    if (_formSignInKey.currentState!.validate()) {
+      // Debug prints to check the values
+
+      int statusCode = await login(_emailController.text, _passwordController.text);
+      if (statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login success')),
+        );
+        Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -37,7 +65,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   topRight: Radius.circular(40),
                 ),
               ),
-
               child: SingleChildScrollView(
                 child: Form(
                   key: _formSignInKey,
@@ -56,6 +83,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 20,
                       ),
                       TextFormField(
+                        controller: _emailController, // Ensure controller is linked
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your email';
@@ -86,6 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 20,
                       ),
                       TextFormField(
+                        controller: _passwordController, // Ensure controller is linked
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -153,33 +182,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       SizedBox(
                         width: double.infinity,
-
                         child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  lightColorScheme.primary),),
-                            onPressed: () {
-                              if (_formSignInKey.currentState!.validate() &&
-                                  rememberPassword) {
-                                Navigator.pushNamed(context, '/home');
-                              } else if (!rememberPassword) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Please agree to the processing of your data'),
-                                  ),
-                                );
-                              }
-                              else if (!rememberPassword) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Please agree to the processing of your data'),
-                                  ),
-                                );
-                              }
-                            },
-                            child: const Text('Sign in')),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                lightColorScheme.primary),
+                          ),
+                          onPressed: _handleLogin,
+                          child: const Text('Sign in'),
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -187,24 +197,28 @@ class _SignInScreenState extends State<SignInScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(child: Divider(
-                            thickness: 0.7,
-                            color: Colors.grey.withOpacity(0.5),
-                          ),),
+                          Expanded(
+                            child: Divider(
+                              thickness: 0.7,
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
                           const Padding(
                             padding: EdgeInsets.symmetric(
-                                vertical: 0,
-                                horizontal: 10),
-                            child: Text('Sign up with',
+                                vertical: 0, horizontal: 10),
+                            child: Text(
+                              'Sign up with',
                               style: TextStyle(
                                 color: Colors.black45,
                               ),
                             ),
                           ),
-                          Expanded(child: Divider(
-                            thickness: 0.7,
-                            color: Colors.grey.withOpacity(0.5),
-                          ),),
+                          Expanded(
+                            child: Divider(
+                              thickness: 0.7,
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -236,8 +250,10 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (e) => const SignUpScreen()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (e) => const SignUpScreen()));
                             },
                             child: Text(
                               'Sign up',

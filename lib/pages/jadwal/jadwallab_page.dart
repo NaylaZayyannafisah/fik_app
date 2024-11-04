@@ -157,15 +157,15 @@ class _JadwallabPageState extends State<JadwallabPage> {
                           ],
                         ),
                         SizedBox(height: 30),
-                        CardConfirmed(
-                          studentName: DummyData.studentName,
-                          studentNim: DummyData.studentNim,
-                          inputDate: DummyData.bookDate,
-                          time: "${DummyData.jamMulai} - ${DummyData.jamSelesai} WIB",
-                          ruangan: DummyData.ruangan,
-                          groupSize: "${DummyData.jumlahPengguna} Orang",
-                          isAccepted: true, bookDate: '', jamMulai: '', jamSelesai: '', jumlahPengguna: '', keterangan: '', // Atur sesuai status
-                        ),
+                        // CardConfirmed(
+                        //   studentName: DummyData.studentName,
+                        //   studentNim: DummyData.studentNim,
+                        //   inputDate: DummyData.bookDate,
+                        //   time: "${DummyData.jamMulai} - ${DummyData.jamSelesai} WIB",
+                        //   ruangan: DummyData.ruangan,
+                        //   groupSize: "${DummyData.jumlahPengguna} Orang",
+                        //   isAccepted: true, bookDate: '', jamMulai: '', jamSelesai: '', jumlahPengguna: '', keterangan: '', // Atur sesuai status
+                        // ),
                       ],
                     ),
                   ),
