@@ -25,7 +25,7 @@ class DetailpeminjamanPage extends StatelessWidget {
     required this.jamSelesai,
     required this.jumlahPengguna,
     required this.keterangan,
-    required bool isAccepted,
+    required bool isAccepted, required String time,
   }) : super(key: key);
 
   @override
